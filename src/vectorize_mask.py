@@ -8,14 +8,13 @@ from shapely.geometry import shape
 from pathlib import Path
 from tqdm import tqdm
 
-def vectorize_mask(mask_path, output_path, min_area=100):
+def vectorize_mask(mask_path, output_path):
     """
     Vetoriza uma máscara binária em polígonos.
     
     Args:
         mask_path (str): Caminho para a máscara binária
         output_path (str): Caminho para salvar o GeoJSON
-        min_area (float): Área mínima dos polígonos em pixels
     """
     with rasterio.open(mask_path) as src:
         # Ler a máscara
@@ -42,10 +41,8 @@ def vectorize_mask(mask_path, output_path, min_area=100):
             # Calcular área em pixels
             area = poly.area
             
-            # Filtrar por área mínima
-            if area >= min_area:
-                polygons.append(poly)
-                areas.append(area)
+            polygons.append(poly)
+            areas.append(area)
         
         # Criar GeoDataFrame
         gdf = gpd.GeoDataFrame(
@@ -85,12 +82,6 @@ def main():
         required=True,
         help='Caminho para salvar o GeoJSON'
     )
-    parser.add_argument(
-        '--min-area',
-        type=float,
-        default=100,
-        help='Área mínima dos polígonos em pixels (padrão: 100)'
-    )
     
     args = parser.parse_args()
     
@@ -103,7 +94,7 @@ def main():
     
     # Vetorizar
     print(f"Vetorizando máscara: {args.mask}")
-    vectorize_mask(args.mask, args.output, args.min_area)
+    vectorize_mask(args.mask, args.output)
     print(f"Polígonos salvos em: {args.output}")
 
 if __name__ == '__main__':
