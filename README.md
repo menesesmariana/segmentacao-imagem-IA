@@ -56,6 +56,5 @@ python src/vectorize_mask.py --mask dados/mascara.tif --output dados/poligonos.g
 ## Detalhes Técnicos
 
 - O modelo utiliza uma arquitetura U-Net simplificada para segmentação semântica
-- As imagens são divididas em blocos de 256x256 pixels
 - A binarização é realizada usando o índice ExG (Excess Green)
 - O modelo é treinado para classificar pixels em duas classes: vegetação (1) e não-vegetação (0) 
